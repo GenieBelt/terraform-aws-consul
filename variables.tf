@@ -63,8 +63,9 @@ variable "inbound_cidr" {
 }
 
 variable "ssh_security_group_ids" {
-  default = ""
+  default = []
   description = "Allow ssh traffic from given security group ids."
+  type = "list"
 }
 
 variable "ssh_inbound_cidr" {
