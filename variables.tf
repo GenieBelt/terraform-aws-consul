@@ -50,3 +50,25 @@ variable "vpc_id" {
   description = "The ID of the VPC in which the nodes will be deployed.  Uses default VPC if not supplied."
   default     = ""
 }
+
+variable "instance_type" {
+  description = "AWS instance type for consul server (like t2.micro)"
+  default = "t2.micro"
+}
+
+variable "inbound_cidr" {
+  type = "list"
+  description = "CIDR for consul inbound traffic"
+  default = ["0.0.0.0/0"]
+}
+
+variable "ssh_security_group_ids" {
+  default = ""
+  description = "Allow ssh traffic from given security group ids."
+}
+
+variable "ssh_inbound_cidr" {
+  default = ["0.0.0.0/0"]
+  type = "list"
+  description = "Allow ssh traffic from given cidr"
+}
