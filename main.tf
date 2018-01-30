@@ -6,9 +6,9 @@
 # the examples/consul-ami/consul.json Packer template.
 # ---------------------------------------------------------------------------------------------------------------------
 
-provider "aws" {
-  region = "${var.aws_region}"
-}
+#provider "aws" {
+#  region = "${var.aws_region}"
+#}
 
 # Terraform 0.9.5 suffered from https://github.com/hashicorp/terraform/issues/14399, which causes this template the
 # conditionals in this template to fail.
