@@ -65,6 +65,7 @@ module "consul_servers" {
   cluster_name  = "${var.cluster_name}-server"
   cluster_size  = "${var.num_servers}"
   instance_type = "${var.instance_type}"
+  spot_price    = "${var.spot_price}"
 
   # The EC2 Instances will use these tags to automatically discover each other and form a cluster
   cluster_tag_key   = "${var.cluster_tag_key}"
@@ -83,6 +84,14 @@ module "consul_servers" {
 
   allowed_inbound_cidr_blocks = "${var.inbound_cidr}"
   ssh_key_name                = "${var.ssh_key_name}"
+
+  tags = [
+    {
+      key                 = "Environment"
+      value               = "development"
+      propagate_at_launch = true
+    },
+  ]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -115,6 +124,7 @@ data "template_file" "user_data_server" {
 #  cluster_name  = "${var.cluster_name}-client"
 #  cluster_size  = "${var.num_clients}"
 #  instance_type = "t2.micro"
+#  spot_price    = "${var.spot_price}"
 #
 #  cluster_tag_key   = "consul-clients"
 #  cluster_tag_value = "${var.cluster_name}"

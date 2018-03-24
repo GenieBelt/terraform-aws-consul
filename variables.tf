@@ -51,6 +51,11 @@ variable "vpc_id" {
   default     = ""
 }
 
+variable "spot_price" {
+  description = "The maximum hourly price to pay for EC2 Spot Instances."
+  default     = ""
+}
+
 variable "instance_type" {
   description = "AWS instance type for consul server (like t2.micro)"
   default = "t2.micro"
