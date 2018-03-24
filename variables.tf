@@ -78,3 +78,9 @@ variable "ssh_inbound_cidr" {
   type = "list"
   description = "Allow ssh traffic from given cidr"
 }
+
+variable "subnet_ids" {
+  default = ""
+  type = "string"
+  description = "Subnets list where consul can run."
+}
