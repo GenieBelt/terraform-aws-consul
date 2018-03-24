@@ -11,6 +11,8 @@ terraform {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_autoscaling_group" "autoscaling_group" {
+  name_prefix = "${var.cluster_name}"
+
   launch_configuration = "${aws_launch_configuration.launch_configuration.name}"
 
   availability_zones  = ["${var.availability_zones}"]
@@ -22,23 +24,23 @@ resource "aws_autoscaling_group" "autoscaling_group" {
   desired_capacity     = "${var.cluster_size}"
   termination_policies = ["${var.termination_policies}"]
 
-  target_group_arns         = ["${var.target_group_arns}"]
-  load_balancers            = ["${var.load_balancers}"]
   health_check_type         = "${var.health_check_type}"
   health_check_grace_period = "${var.health_check_grace_period}"
   wait_for_capacity_timeout = "${var.wait_for_capacity_timeout}"
 
-  tag {
-    key                 = "Name"
-    value               = "${var.cluster_name}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key                 = "${var.cluster_tag_key}"
-    value               = "${var.cluster_tag_value}"
-    propagate_at_launch = true
-  }
+  tags = [
+    {
+      key                 = "Name"
+      value               = "${var.cluster_name}"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "${var.cluster_tag_key}"
+      value               = "${var.cluster_tag_value}"
+      propagate_at_launch = true
+    },
+    "${var.tags}",
+  ]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -50,6 +52,7 @@ resource "aws_launch_configuration" "launch_configuration" {
   image_id      = "${var.ami_id}"
   instance_type = "${var.instance_type}"
   user_data     = "${var.user_data}"
+  spot_price    = "${var.spot_price}"
 
   iam_instance_profile        = "${aws_iam_instance_profile.instance_profile.name}"
   key_name                    = "${var.ssh_key_name}"
@@ -91,6 +94,10 @@ resource "aws_security_group" "lc_security_group" {
   # when you try to do a terraform destroy.
   lifecycle {
     create_before_destroy = true
+  }
+
+  tags {
+    Name = "${var.cluster_name}"
   }
 }
 
