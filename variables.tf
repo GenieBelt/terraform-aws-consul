@@ -80,7 +80,7 @@ variable "ssh_inbound_cidr" {
 }
 
 variable "subnet_ids" {
-  default = ""
-  type = "string"
+  default = []
+  type = "list"
   description = "Subnets list where consul can run."
 }
