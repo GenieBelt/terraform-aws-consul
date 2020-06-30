@@ -75,7 +75,7 @@ module "consul_servers" {
   user_data = "${data.template_file.user_data_server.rendered}"
 
   vpc_id     = "${data.aws_vpc.default.id}"
-  subnet_ids = "${split(",", length(var.subnet_ids) > 0 ? join(",", data.aws_subnet_ids.default.ids) : join(",",var.subnet_ids))}"
+  subnet_ids = "${split(",", length(var.subnet_ids) == 0 ? join(",", data.aws_subnet_ids.default.ids) : join(",",var.subnet_ids))}"
 
   # To make testing easier, we allow Consul and SSH requests from any IP address here but in a production
   # deployment, we strongly recommend you limit this to the IP address ranges of known, trusted servers inside your VPC.
