@@ -67,7 +67,7 @@ variable "instance_type" {
 }
 
 variable "inbound_cidr" {
-  type = "list"
+  type = list
   description = "CIDR for consul inbound traffic"
   default = ["0.0.0.0/0"]
 }
@@ -75,17 +75,17 @@ variable "inbound_cidr" {
 variable "ssh_security_group_ids" {
   default = []
   description = "Allow ssh traffic from given security group ids."
-  type = "list"
+  type = list
 }
 
 variable "ssh_inbound_cidr" {
   default = ["0.0.0.0/0"]
-  type = "list"
+  type = list
   description = "Allow ssh traffic from given cidr"
 }
 
 variable "subnet_ids" {
   default = []
-  type = "list"
+  type = list
   description = "Subnets list where consul can run."
 }
