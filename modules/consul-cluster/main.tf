@@ -1,10 +1,12 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # REQUIRE A SPECIFIC TERRAFORM VERSION OR HIGHER
-# This module has been updated with 0.12 syntax, which means it is no longer compatible with any versions below 0.12.
 # ----------------------------------------------------------------------------------------------------------------------
 
 terraform {
-  required_version = ">= 0.12"
+  # This module is now only being tested with Terraform 0.13.x. However, to make upgrading easier, we are setting
+  # 0.12.26 as the minimum version, as that version added support for required_providers with source URLs, making it
+  # forwards compatible with 0.13.x code.
+  required_version = ">= 0.12.26"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -32,6 +34,8 @@ resource "aws_autoscaling_group" "autoscaling_group" {
 
   enabled_metrics = var.enabled_metrics
 
+  protect_from_scale_in = var.protect_from_scale_in
+
   tags = flatten(
     [
       {
@@ -47,6 +51,18 @@ resource "aws_autoscaling_group" "autoscaling_group" {
       var.tags,
     ]
   )
+
+  lifecycle {
+    # As of AWS Provider 3.x, inline load_balancers and target_group_arns
+    # in an aws_autoscaling_group take precedence over attachment resources.
+    # Since the consul-cluster module does not define any Load Balancers,
+    # it's safe to assume that we will always want to favor an attachment
+    # over these inline properties.
+    #
+    # For further discussion and links to relevant documentation, see
+    # https://github.com/hashicorp/terraform-aws-vault/issues/210
+    ignore_changes = [load_balancers, target_group_arns]
+  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

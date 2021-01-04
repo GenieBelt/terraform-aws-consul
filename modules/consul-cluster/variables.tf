@@ -59,13 +59,13 @@ variable "cluster_tag_value" {
 variable "subnet_ids" {
   description = "The subnet IDs into which the EC2 Instances should be deployed. We recommend one subnet ID per node in the cluster_size variable. At least one of var.subnet_ids or var.availability_zones must be non-empty."
   type        = list(string)
-  default     = []
+  default     = null
 }
 
 variable "availability_zones" {
   description = "The availability zones into which the EC2 Instances should be deployed. We recommend one availability zone per node in the cluster_size variable. At least one of var.subnet_ids or var.availability_zones must be non-empty."
   type        = list(string)
-  default     = []
+  default     = null
 }
 
 variable "ssh_key_name" {
@@ -260,3 +260,8 @@ variable "iam_instance_profile_name" {
   default     = null
 }
 
+variable "protect_from_scale_in" {
+  description = "(Optional) Allows setting instance protection. The autoscaling group will not select instances with this setting for termination during scale in events."
+  type        = bool
+  default     = false
+}
